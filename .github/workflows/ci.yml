@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Login to ACR
+      run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login ${{ secrets.DOCKER_SERVER }} -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+    - name: Build and push
+      run: |
+        docker build . -t ${{ secrets.DOCKER_SERVER }}/librechat
+        docker push ${{ secrets.DOCKER_SERVER }}/librechat
+
+    - name: Set up Azure CLI
+      uses: azure/setup-azure-cli@v1
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to Azure Container Instances
+      run: |
+        az container create --name librechat-group --resource-group librechat-rg --image ${{ secrets.DOCKER_SERVER }}/librechat --dns-name-label librechat-label --ports 80

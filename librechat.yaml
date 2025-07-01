@@ -1,0 +1,20 @@
+version: 1.2.1
+
+# … any other UI or feature flags you need …
+
+# ──────────────────────────────────────────────────
+#  AI Endpoints
+# ──────────────────────────────────────────────────
+endpoints:
+  azureOpenAI:
+    # this ID (azureOpenAI) hooks into the built-in Azure plugin
+    name: "Azure OpenAI"
+    plugin: azureOpenAI
+    # read these from Railway’s env
+    apiKey: "${AZURE_OPENAI_API_KEY}"
+    baseURL: "${AZURE_OPENAI_BASE_URL}"
+    apiVersion: "${AZURE_OPENAI_API_VERSION}"
+    models:
+      default:
+        # the list you’ll see in the model-selector, default[0] is what gets used
+        - "${AZURE_OPENAI_DEPLOYMENT_NAME}"

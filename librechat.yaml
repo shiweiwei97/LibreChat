@@ -1,20 +1,47 @@
+# librechat.yaml
 version: 1.2.1
 
-# … any other UI or feature flags you need …
+# ──────────────────────────────────────────────────
+#  UI Settings (optional defaults)
+# ──────────────────────────────────────────────────
+ui:
+  theme: light
+  showBranding: false
+  sidebar:
+    enabled: true
 
 # ──────────────────────────────────────────────────
 #  AI Endpoints
 # ──────────────────────────────────────────────────
 endpoints:
   azureOpenAI:
-    # this ID (azureOpenAI) hooks into the built-in Azure plugin
     name: "Azure OpenAI"
     plugin: azureOpenAI
-    # read these from Railway’s env
     apiKey: "${AZURE_OPENAI_API_KEY}"
-    baseURL: "${AZURE_OPENAI_BASE_URL}"
+    endpoint: "${AZURE_OPENAI_BASE_URL}"
     apiVersion: "${AZURE_OPENAI_API_VERSION}"
-    models:
-      default:
-        # the list you’ll see in the model-selector, default[0] is what gets used
-        - "${AZURE_OPENAI_DEPLOYMENT_NAME}"
+    deploymentName: "${AZURE_OPENAI_DEPLOYMENT_NAME}"
+
+# ──────────────────────────────────────────────────
+#  Conversation Defaults
+# ──────────────────────────────────────────────────
+defaults:
+  systemPrompt: |
+    You are a helpful assistant. Answer user questions clearly and concisely.
+  maxTokens: 1024
+  temperature: 0.7
+  topP: 0.9
+
+# ──────────────────────────────────────────────────
+#  Logging & Analytics (optional)
+# ──────────────────────────────────────────────────
+logging:
+  level: info
+  enableClientLogs: false
+
+# ──────────────────────────────────────────────────
+#  Plugins (if you add more later)
+# ──────────────────────────────────────────────────
+plugins:
+  # - name: myCustomPlugin
+  #   plugin: ./plugins/myCustomPlugin
